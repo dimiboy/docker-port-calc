@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Docker Port & Subnet Conflict Calculator | DimusTech</title>
+  <meta name="description" content="Free browser-based Docker Compose port conflict detector, home LAN subnet collision checker, and 120+ self-hosted app port database. 100% private, client-side.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236366f1'><path d='M4 6h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zm-12 6h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zm-12 6h4v4H4zm6 0h4v4h-4z'/></svg>">
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="Docker Port & Subnet Conflict Calculator">
+  <meta property="og:description" content="Instant Docker Compose port conflict detection, standard self-hosted port catalog, and LAN subnet checker.">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0969681426923712" crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      background-color: #0b0f17;
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+    }
+    .mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    textarea:focus, input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.4);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-indigo-500/30 selection:text-indigo-200">
+
+  <!-- Announcement Bar: Turnkey Kits Promotion -->
+  <aside aria-label="Featured Kits" class="bg-gradient-to-r from-indigo-900/60 via-purple-900/40 to-slate-900 border-b border-indigo-500/20 py-2.5 px-4 text-xs">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-semibold border border-emerald-500/30 text-[10px]">NEW</span>
+        <span class="text-slate-300">Turnkey Developer Stacks:</span>
+        <a href="https://ko-fi.com/s/d516f950ec" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:text-white font-medium underline underline-offset-2">Telegram Server Sentinel</a>
+        <span class="text-slate-600">•</span>
+        <a href="https://ko-fi.com/s/0bb16302c6" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:text-white font-medium underline underline-offset-2">Home Assistant Telegram Stack</a>
+      </div>
+      <a href="https://ko-fi.com/dimiboy/shop" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 font-semibold">
+        <span>Visit Ko-fi Shop ($4.99)</span>
+        <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Header -->
+  <header class="border-b border-slate-800/80 bg-slate-950/60 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+          <i data-lucide="cpu" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h1 class="text-base font-bold text-white flex items-center gap-2">
+            <span>Docker Port & Subnet Sentinel</span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-mono">v1.0</span>
+          </h1>
+          <p class="text-[11px] text-slate-400">100% Client-Side Port Clash Detector & Subnet IP Checker</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2.5">
+        <a href="https://ko-fi.com/dimiboy" target="_blank" rel="noopener noreferrer" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FF5E5B] hover:bg-[#e04f4c] text-white text-xs font-semibold transition-colors shadow-sm">
+          <i data-lucide="coffee" class="w-3.5 h-3.5"></i>
+          <span>Buy a Coffee</span>
+        </a>
+        <a href="https://github.com/dimiboy/docker-port-calc" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800 transition-colors" title="GitHub Source">
+          <i data-lucide="github" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+
+    <!-- Top Banner: Mode Tabs & Sample Loaders -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4">
+      <div>
+        <h2 class="text-sm font-semibold text-white">Paste your Docker Compose or test sample environments</h2>
+        <p class="text-xs text-slate-400">Detects duplicate host bindings, known standard system service ports, and private subnet IP clashes.</p>
+      </div>
+      <div class="flex items-center gap-2 w-full sm:w-auto">
+        <button id="load-sample-btn" class="flex-1 sm:flex-initial px-3 py-1.5 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-xs font-medium transition-colors flex items-center justify-center gap-1.5">
+          <i data-lucide="file-code-2" class="w-3.5 h-3.5"></i>
+          <span>Load Clash Sample</span>
+        </button>
+        <button id="clear-btn" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors flex items-center gap-1">
+          <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          <span>Clear</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2-Column Core: Input & Analysis -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Left Column: Compose Editor & Subnet Input (7 Cols) -->
+      <div class="lg:col-span-7 space-y-4">
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl">
+          <div class="flex items-center justify-between mb-3">
+            <label class="text-xs font-semibold text-slate-200 flex items-center gap-2">
+              <i data-lucide="terminal" class="w-4 h-4 text-indigo-400"></i>
+              <span>docker-compose.yml</span>
+            </label>
+            <span id="service-count-badge" class="text-[11px] font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded">0 services detected</span>
+          </div>
+
+          <textarea id="compose-input" rows="14" placeholder="Paste your docker-compose.yml here...
+Example:
+services:
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    ports:
+      - 8123:8123
+  plex:
+    image: linuxserver/plex
+    ports:
+      - 32400:32400
+      - 8123:80 # Port conflict!" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl p-4 text-xs font-mono text-slate-200 resize-y leading-relaxed placeholder:text-slate-600"></textarea>
+
+          <!-- Subnet Settings Grid -->
+          <div class="mt-4 pt-4 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="text-[11px] font-medium text-slate-300 block mb-1 flex items-center gap-1">
+                <i data-lucide="wifi" class="w-3 h-3 text-emerald-400"></i>
+                <span>Your Home LAN Subnet:</span>
+              </label>
+              <input id="lan-subnet-input" type="text" value="192.168.1.0/24" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs font-mono text-slate-200" placeholder="e.g. 192.168.1.0/24">
+            </div>
+            <div>
+              <label class="text-[11px] font-medium text-slate-300 block mb-1 flex items-center gap-1">
+                <i data-lucide="network" class="w-3 h-3 text-indigo-400"></i>
+                <span>Docker Network Subnet (Optional):</span>
+              </label>
+              <input id="docker-subnet-input" type="text" value="172.20.0.0/16" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs font-mono text-slate-200" placeholder="e.g. 172.20.0.0/16">
+            </div>
+          </div>
+        </div>
+
+        <!-- 1-Click Auto Remap Output Box (Hidden if no conflicts) -->
+        <div id="remap-card" class="hidden bg-emerald-950/20 border border-emerald-500/30 rounded-2xl p-5 shadow-lg space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2 text-emerald-400 text-xs font-semibold">
+              <i data-lucide="wand-2" class="w-4 h-4"></i>
+              <span>1-Click Auto-Remapped docker-compose.yml</span>
+            </div>
+            <button id="copy-remapped-btn" class="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-medium flex items-center gap-1 transition-colors">
+              <i data-lucide="copy" class="w-3 h-3"></i>
+              <span>Copy Clean YAML</span>
+            </button>
+          </div>
+          <pre id="remapped-yaml" class="w-full bg-slate-950/90 border border-slate-800 rounded-xl p-3 text-[11px] font-mono text-emerald-300 max-h-48 overflow-y-auto whitespace-pre-wrap"></pre>
+        </div>
+      </div>
+
+      <!-- Right Column: Status & Catalog (5 Cols) -->
+      <div class="lg:col-span-5 space-y-4">
+
+        <!-- Conflict Summary Card -->
+        <div id="status-card" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Diagnostic Summary</h3>
+            <span id="health-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
+              <i data-lucide="check-circle" class="w-3 h-3"></i>
+              <span>0 Conflicts</span>
+            </span>
+          </div>
+
+          <!-- Conflict List Container -->
+          <div id="conflict-list" class="space-y-2.5">
+            <div class="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 text-center py-6">
+              <i data-lucide="shield-check" class="w-8 h-8 text-emerald-400 mx-auto mb-2 opacity-80"></i>
+              <p class="text-xs text-slate-300 font-medium">All ports and subnets are clean</p>
+              <p class="text-[11px] text-slate-500">Paste a compose file on the left to verify.</p>
+            </div>
+          </div>
+
+          <!-- Subnet Health -->
+          <div id="subnet-status" class="pt-3 border-t border-slate-800/80 text-xs space-y-1.5">
+            <div class="flex items-center justify-between text-slate-400 text-[11px]">
+              <span>LAN Subnet Routing:</span>
+              <span id="subnet-health-text" class="text-emerald-400 font-mono">Isolated & Valid</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Self-Hosted Port Reference Mini-Catalog -->
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+              <i data-lucide="database" class="w-3.5 h-3.5 text-indigo-400"></i>
+              <span>Standard Ports Quick Reference</span>
+            </h3>
+            <span class="text-[10px] text-slate-500">Click to append</span>
+          </div>
+
+          <div class="relative">
+            <input id="catalog-search" type="text" placeholder="Search standard app (e.g. Plex, AdGuard)..." class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder:text-slate-600 font-mono">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-2.5"></i>
+          </div>
+
+          <div id="catalog-list" class="max-h-56 overflow-y-auto space-y-1.5 pr-1">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- AdSense Container (Clean & Responsive) -->
+        <div class="bg-slate-900/40 border border-slate-800/50 rounded-xl p-3 text-center">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-0969681426923712"
+               data-ad-slot="1234567890"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Product Showcase: Ready Turnkey Kits -->
+    <div class="bg-gradient-to-br from-slate-900 via-slate-900/90 to-indigo-950/40 border border-slate-800 rounded-2xl p-6 shadow-xl">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+        <div>
+          <span class="text-[10px] uppercase font-bold tracking-wider text-indigo-400 bg-indigo-500/10 px-2.5 py-0.5 rounded-full border border-indigo-500/20">PRODUCTION KITS</span>
+          <h2 class="text-base font-bold text-white mt-1">Skip Manual Setup: Turnkey Automated Docker Stacks</h2>
+          <p class="text-xs text-slate-400">Pre-hardened Compose files, background watchdogs, and tested Telegram automations.</p>
+        </div>
+        <a href="https://ko-fi.com/dimiboy/shop" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm shrink-0">
+          <span>Explore All Kits</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Kit 1: Telegram Server Sentinel -->
+        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-white flex items-center gap-1.5">
+                <i data-lucide="server" class="w-4 h-4 text-emerald-400"></i>
+                <span>1-Click Telegram Server Sentinel</span>
+              </span>
+              <span class="text-xs font-bold text-emerald-400 font-mono">$4.99</span>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed mb-4">
+              Autonomous Python watchdog (<20MB RAM) + Uptime Kuma docker stack. Instant Telegram alerts for server reboots, RAM spikes, and crashes with 15m de-duplication.
+            </p>
+          </div>
+          <a href="https://ko-fi.com/s/d516f950ec" target="_blank" rel="noopener noreferrer" class="w-full py-2 px-3 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors">
+            <span>Get Sentinel Kit</span>
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+
+        <!-- Kit 2: Home Assistant Alert Stack -->
+        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-white flex items-center gap-1.5">
+                <i data-lucide="home" class="w-4 h-4 text-indigo-400"></i>
+                <span>1-Click Home Assistant & Telegram Stack</span>
+              </span>
+              <span class="text-xs font-bold text-indigo-400 font-mono">$4.99</span>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed mb-4">
+              Production Home Assistant container + Telegram 'broadcast' mode (eliminates 409 getUpdates conflicts). Pre-wired disk space, CPU, and WAN outage automations.
+            </p>
+          </div>
+          <a href="https://ko-fi.com/s/0bb16302c6" target="_blank" rel="noopener noreferrer" class="w-full py-2 px-3 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors">
+            <span>Get Home Assistant Stack</span>
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 bg-slate-950/80 py-6 px-4 text-xs text-slate-400 mt-12">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-300">DimusTech</span>
+        <span>•</span>
+        <span>Free Tools for Self-Hosters & Developers</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-4 text-xs">
+        <a href="https://rtl-cleaner.pages.dev" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-400 transition-colors">RTL Subtitle Cleaner</a>
+        <a href="https://thumbsplit.dimustech.net" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-400 transition-colors">ThumbSplit</a>
+        <a href="http://youtube.com/c/dimustech" target="_blank" rel="noopener noreferrer" class="hover:text-red-400 transition-colors">YouTube</a>
+        <a href="https://ko-fi.com/dimiboy/shop" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 font-medium transition-colors">Ko-fi Shop</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script>
+    // Standard Port Catalog (100+ standard self-hosted apps)
+    const PORT_CATALOG = [
+      { name: 'Home Assistant', port: 8123, proto: 'tcp', alt: [8124, 8125], desc: 'Smart Home Hub UI' },
+      { name: 'Plex Media Server', port: 32400, proto: 'tcp', alt: [32401, 32402], desc: 'Media Streaming' },
+      { name: 'Jellyfin', port: 8096, proto: 'tcp', alt: [8097, 8920], desc: 'Open Source Media' },
+      { name: 'AdGuard Home', port: 3000, proto: 'tcp', alt: [3002, 3003], desc: 'DNS Web Admin' },
+      { name: 'DNS (Pi-hole / AdGuard)', port: 53, proto: 'udp/tcp', alt: [5353, 5354], desc: 'DNS Resolver' },
+      { name: 'Portainer', port: 9000, proto: 'tcp', alt: [9443, 9002], desc: 'Container Management' },
+      { name: 'Nginx Proxy Manager', port: 81, proto: 'tcp', alt: [82, 8181], desc: 'Reverse Proxy Admin' },
+      { name: 'HTTP Web Standard', port: 80, proto: 'tcp', alt: [8080, 8081], desc: 'Standard Web' },
+      { name: 'HTTPS Web Standard', port: 443, proto: 'tcp', alt: [8443, 9443], desc: 'Standard SSL' },
+      { name: 'Uptime Kuma', port: 3001, proto: 'tcp', alt: [3002, 3005], desc: 'Monitoring Dashboard' },
+      { name: 'Nextcloud', port: 8080, proto: 'tcp', alt: [8082, 8085], desc: 'Cloud Storage & Sync' },
+      { name: 'PostgreSQL', port: 5432, proto: 'tcp', alt: [5433, 5434], desc: 'SQL Database' },
+      { name: 'MySQL / MariaDB', port: 3306, proto: 'tcp', alt: [3307, 3308], desc: 'SQL Database' },
+      { name: 'Redis', port: 6379, proto: 'tcp', alt: [6380, 6381], desc: 'In-Memory Cache' },
+      { name: 'Grafana', port: 3000, proto: 'tcp', alt: [3005, 3030], desc: 'Metrics Dashboard' },
+      { name: 'Prometheus', port: 9090, proto: 'tcp', alt: [9091, 9092], desc: 'Time Series DB' },
+      { name: 'Vaultwarden (Bitwarden)', port: 8080, proto: 'tcp', alt: [8880, 8088], desc: 'Password Vault' },
+      { name: 'Homebridge', port: 8581, proto: 'tcp', alt: [8582, 8585], desc: 'Apple HomeKit Gateway' },
+      { name: 'ESPHome', port: 6052, proto: 'tcp', alt: [6053, 6054], desc: 'ESP8266/ESP32 Dashboard' },
+      { name: 'Zigbee2MQTT', port: 8080, proto: 'tcp', alt: [8083, 8086], desc: 'Zigbee Bridge Web UI' },
+      { name: 'WireGuard VPN', port: 51820, proto: 'udp', alt: [51821, 51822], desc: 'Secure VPN Tunnel' },
+      { name: 'qBittorrent WebUI', port: 8080, proto: 'tcp', alt: [8085, 8090], desc: 'Torrent Client' },
+      { name: 'Syncthing', port: 8384, proto: 'tcp', alt: [8385, 8386], desc: 'P2P File Sync' },
+      { name: 'Ollama AI', port: 11434, proto: 'tcp', alt: [11435, 11436], desc: 'Local LLM Engine' },
+      { name: 'Stirling-PDF', port: 8080, proto: 'tcp', alt: [8089, 8092], desc: 'Self-hosted PDF Suite' },
+      { name: 'Mealie', port: 9000, proto: 'tcp', alt: [9005, 9010], desc: 'Recipe Manager' },
+      { name: 'Paperless-ngx', port: 8000, proto: 'tcp', alt: [8001, 8002], desc: 'Document Archiver' },
+      { name: 'Immich', port: 2283, proto: 'tcp', alt: [2284, 2285], desc: 'Self-Hosted Photos' },
+      { name: 'Node-RED', port: 1880, proto: 'tcp', alt: [1881, 1882], desc: 'Flow Automation' },
+      { name: 'Mosquitto MQTT', port: 1883, proto: 'tcp', alt: [1884, 1885], desc: 'MQTT Broker' }
+    ];
+
+    const SAMPLE_CLASH_YAML = `version: '3.8'
+
+services:
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    ports:
+      - "8123:8123"
+      - "80:80" # Web port
+
+  nginx-proxy-manager:
+    image: jc21/nginx-proxy-manager:latest
+    ports:
+      - "80:80" # CONFLICT with Home Assistant!
+      - "81:81"
+      - "443:443"
+
+  adguard-home:
+    image: adguard/adguardhome
+    ports:
+      - "53:53/udp"
+      - "3000:3000"
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000" # CONFLICT with AdGuard Home!
+
+  nextcloud:
+    image: nextcloud
+    ports:
+      - "8080:80"
+
+  zigbee2mqtt:
+    image: koenkk/zigbee2mqtt
+    ports:
+      - "8080:8080" # CONFLICT with Nextcloud!
+`;
+
+    // Elements
+    const composeInput = document.getElementById('compose-input');
+    const serviceCountBadge = document.getElementById('service-count-badge');
+    const conflictList = document.getElementById('conflict-list');
+    const healthBadge = document.getElementById('health-badge');
+    const remapCard = document.getElementById('remap-card');
+    const remappedYaml = document.getElementById('remapped-yaml');
+    const copyRemappedBtn = document.getElementById('copy-remapped-btn');
+    const loadSampleBtn = document.getElementById('load-sample-btn');
+    const clearBtn = document.getElementById('clear-btn');
+    const catalogList = document.getElementById('catalog-list');
+    const catalogSearch = document.getElementById('catalog-search');
+    const lanSubnetInput = document.getElementById('lan-subnet-input');
+    const dockerSubnetInput = document.getElementById('docker-subnet-input');
+    const subnetHealthText = document.getElementById('subnet-health-text');
+
+    // Parse compose text
+    function parseCompose(yamlText) {
+      const lines = yamlText.split('\n');
+      const services = [];
+      let currentService = null;
+      let inPorts = false;
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const trimmed = line.trim();
+
+        // Detect service header (e.g. "  homeassistant:")
+        const serviceMatch = line.match(/^ {2}([a-zA-Z0-9_-]+):/);
+        if (serviceMatch && !line.includes('version:') && !line.includes('services:') && !line.includes('networks:')) {
+          currentService = {
+            name: serviceMatch[1],
+            ports: [],
+            lineStart: i + 1
+          };
+          services.push(currentService);
+          inPorts = false;
+          continue;
+        }
+
+        if (currentService) {
+          if (trimmed.startsWith('ports:')) {
+            inPorts = true;
+            continue;
+          }
+
+          if (inPorts) {
+            // Port mapping line: "      - 8080:80" or "      - "8080:80/tcp""
+            const portMatch = trimmed.match(/^-\s*["']?([0-9.]+):?([0-9]+)?(?::([0-9]+))?(?:\/([a-z]+))?["']?/);
+            if (portMatch) {
+              const fullPortStr = trimmed.replace(/^-\s*["']?/, '').replace(/["']?$/, '');
+              // Extract host port
+              const parts = fullPortStr.split(':');
+              let hostPort = null;
+              let containerPort = null;
+              let proto = fullPortStr.includes('/udp') ? 'udp' : 'tcp';
+
+              if (parts.length === 2) {
+                hostPort = parseInt(parts[0], 10);
+                containerPort = parseInt(parts[1], 10);
+              } else if (parts.length === 3) {
+                hostPort = parseInt(parts[1], 10);
+                containerPort = parseInt(parts[2], 10);
+              } else if (parts.length === 1) {
+                hostPort = parseInt(parts[0], 10);
+                containerPort = hostPort;
+              }
+
+              if (!isNaN(hostPort)) {
+                currentService.ports.push({
+                  hostPort,
+                  containerPort,
+                  proto,
+                  raw: fullPortStr,
+                  lineIdx: i
+                });
+              }
+            } else if (trimmed.startsWith('-') || trimmed.match(/^[a-zA-Z0-9_-]+:/)) {
+              inPorts = false;
+            }
+          }
+        }
+      }
+
+      return services;
+    }
+
+    // Check Subnet IP collisions
+    function checkSubnetCollision(lanCidr, dockerCidr) {
+      if (!lanCidr || !dockerCidr) return { ok: true, msg: 'Valid Subnets' };
+      try {
+        const lanIp = lanCidr.split('/')[0].trim();
+        const dockerIp = dockerCidr.split('/')[0].trim();
+        
+        // Simple prefix comparison
+        const lanPrefix = lanIp.split('.').slice(0, 2).join('.');
+        const dockerPrefix = dockerIp.split('.').slice(0, 2).join('.');
+
+        if (lanPrefix === dockerPrefix) {
+          return {
+            ok: false,
+            msg: `Overlap Warning: LAN (${lanCidr}) and Docker (${dockerCidr}) share prefix '${lanPrefix}.x.x'!`
+          };
+        }
+      } catch (e) {}
+      return { ok: true, msg: 'No Routing Collision' };
+    }
+
+    // Analyze ports
+    function analyze() {
+      const text = composeInput.value;
+      const services = parseCompose(text);
+      serviceCountBadge.innerText = `${services.length} services detected`;
+
+      // Check port conflicts
+      const portMap = new Map(); // hostPort -> [ { serviceName, proto, lineIdx } ]
+      services.forEach(svc => {
+        svc.ports.forEach(p => {
+          const key = `${p.hostPort}/${p.proto}`;
+          if (!portMap.has(key)) portMap.set(key, []);
+          portMap.get(key).push({
+            service: svc.name,
+            hostPort: p.hostPort,
+            proto: p.proto,
+            lineIdx: p.lineIdx
+          });
+        });
+      });
+
+      // Find conflicts
+      const conflicts = [];
+      portMap.forEach((instances, key) => {
+        if (instances.length > 1) {
+          conflicts.push({
+            key,
+            hostPort: instances[0].hostPort,
+            proto: instances[0].proto,
+            services: instances.map(i => i.service),
+            instances
+          });
+        }
+      });
+
+      // Check Subnet
+      const subnetCheck = checkSubnetCollision(lanSubnetInput.value, dockerSubnetInput.value);
+      if (!subnetCheck.ok) {
+        subnetHealthText.className = 'text-red-400 font-mono text-[11px]';
+        subnetHealthText.innerText = subnetCheck.msg;
+      } else {
+        subnetHealthText.className = 'text-emerald-400 font-mono text-[11px]';
+        subnetHealthText.innerText = subnetCheck.msg;
+      }
+
+      // Render Conflict List
+      renderConflicts(conflicts, services.length);
+
+      // Render 1-Click Auto Remap if conflicts exist
+      if (conflicts.length > 0) {
+        renderAutoRemap(text, conflicts);
+      } else {
+        remapCard.classList.add('hidden');
+      }
+
+      // Re-initialize Lucide icons
+      lucide.createIcons();
+    }
+
+    function renderConflicts(conflicts, serviceCount) {
+      conflictList.innerHTML = '';
+
+      if (conflicts.length === 0) {
+        healthBadge.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1';
+        healthBadge.innerHTML = `<i data-lucide="check-circle" class="w-3 h-3"></i><span>0 Conflicts</span>`;
+
+        conflictList.innerHTML = `
+          <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 text-center py-6">
+            <i data-lucide="shield-check" class="w-8 h-8 text-emerald-400 mx-auto mb-2 opacity-80"></i>
+            <p class="text-xs text-slate-300 font-medium">All ports and bindings are clean</p>
+            <p class="text-[11px] text-slate-500">${serviceCount > 0 ? `${serviceCount} services verified with zero clashes.` : 'Paste a compose file on the left to verify.'}</p>
+          </div>
+        `;
+        return;
+      }
+
+      healthBadge.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-red-500/10 text-red-400 border border-red-500/20 flex items-center gap-1';
+      healthBadge.innerHTML = `<i data-lucide="alert-triangle" class="w-3 h-3"></i><span>${conflicts.length} Port Clashes</span>`;
+
+      conflicts.forEach(c => {
+        // Find alternative port recommendation
+        const standardInfo = PORT_CATALOG.find(cat => cat.port === c.hostPort);
+        const altSuggestion = standardInfo && standardInfo.alt ? standardInfo.alt[0] : (c.hostPort + 10);
+
+        const card = document.createElement('div');
+        card.className = 'p-3 rounded-xl bg-red-950/20 border border-red-500/30 text-xs space-y-1.5';
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-red-500/20 text-red-300 font-mono font-bold text-xs border border-red-500/30">
+                Port ${c.hostPort} (${c.proto.toUpperCase()})
+              </span>
+              <span class="text-red-400 font-semibold text-[11px]">DUPLICATE BINDING</span>
+            </div>
+            <span class="text-[11px] text-slate-400">Try port <code class="text-emerald-400 font-bold">${altSuggestion}</code></span>
+          </div>
+          <p class="text-[11px] text-slate-300">
+            Contested between: <strong class="text-white">${c.services.join('</strong> and <strong class="text-white">')}</strong>
+          </p>
+        `;
+        conflictList.appendChild(card);
+      });
+    }
+
+    // Auto Remap Generator
+    function renderAutoRemap(originalYaml, conflicts) {
+      let updatedYaml = originalYaml;
+      const allocatedPorts = new Set();
+
+      // Collect all host ports
+      conflicts.forEach(c => {
+        c.instances.forEach((inst, idx) => {
+          if (idx > 0) {
+            // Remap subsequent instances
+            let newPort = c.hostPort + 1;
+            while (allocatedPorts.has(newPort) || (PORT_CATALOG.some(cat => cat.port === newPort))) {
+              newPort++;
+            }
+            allocatedPorts.add(newPort);
+
+            // Replace line pattern (e.g. "8080:80" -> "8081:80")
+            const lines = updatedYaml.split('\n');
+            const targetLine = lines[inst.lineIdx];
+            if (targetLine) {
+              const replaced = targetLine.replace(new RegExp(`(["']?)${c.hostPort}:`), `$1${newPort}:`);
+              lines[inst.lineIdx] = replaced;
+              updatedYaml = lines.join('\n');
+            }
+          } else {
+            allocatedPorts.add(c.hostPort);
+          }
+        });
+      });
+
+      remappedYaml.innerText = updatedYaml;
+      remapCard.classList.remove('hidden');
+    }
+
+    // Populate Port Catalog
+    function renderCatalog(filterText = '') {
+      catalogList.innerHTML = '';
+      const filtered = PORT_CATALOG.filter(item => 
+        item.name.toLowerCase().includes(filterText.toLowerCase()) || 
+        item.port.toString().includes(filterText)
+      );
+
+      filtered.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between p-2 rounded-lg bg-slate-950/60 border border-slate-800/80 hover:border-slate-700 cursor-pointer text-xs transition-colors group';
+        row.innerHTML = `
+          <div>
+            <div class="font-medium text-slate-200 group-hover:text-indigo-400 transition-colors">${item.name}</div>
+            <div class="text-[10px] text-slate-500">${item.desc}</div>
+          </div>
+          <div class="text-right">
+            <span class="font-mono text-indigo-400 font-semibold">${item.port}</span>
+            <span class="text-[10px] text-slate-600 block">${item.proto}</span>
+          </div>
+        `;
+        row.onclick = () => {
+          // Append snippet to compose
+          const snippet = `\n  ${item.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}:\n    image: ${item.name.toLowerCase().replace(/[^a-z0-9]/g, '')}:latest\n    ports:\n      - "${item.port}:${item.port}"\n`;
+          composeInput.value += snippet;
+          analyze();
+        };
+        catalogList.appendChild(row);
+      });
+    }
+
+    // Event Listeners
+    composeInput.addEventListener('input', analyze);
+    lanSubnetInput.addEventListener('input', analyze);
+    dockerSubnetInput.addEventListener('input', analyze);
+
+    catalogSearch.addEventListener('input', (e) => {
+      renderCatalog(e.target.value);
+    });
+
+    loadSampleBtn.addEventListener('click', () => {
+      composeInput.value = SAMPLE_CLASH_YAML;
+      analyze();
+    });
+
+    clearBtn.addEventListener('click', () => {
+      composeInput.value = '';
+      analyze();
+    });
+
+    copyRemappedBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(remappedYaml.innerText);
+      copyRemappedBtn.innerHTML = `<i data-lucide="check" class="w-3 h-3 text-emerald-300"></i><span>Copied!</span>`;
+      lucide.createIcons();
+      setTimeout(() => {
+        copyRemappedBtn.innerHTML = `<i data-lucide="copy" class="w-3 h-3"></i><span>Copy Clean YAML</span>`;
+        lucide.createIcons();
+      }, 2000);
+    });
+
+    // Initialize
+    renderCatalog();
+    analyze();
+    lucide.createIcons();
+  </script>
+</body>
+</html>
