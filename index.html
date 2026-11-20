@@ -271,19 +271,19 @@ services:
         </a>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Kit 1: Telegram Server Sentinel -->
         <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
           <div>
             <div class="flex items-center justify-between mb-2">
               <span class="text-xs font-bold text-white flex items-center gap-1.5">
                 <i data-lucide="server" class="w-4 h-4 text-emerald-400"></i>
-                <span>1-Click Telegram Server Sentinel</span>
+                <span>Telegram Server Sentinel</span>
               </span>
               <span class="text-xs font-bold text-emerald-400 font-mono">$4.99</span>
             </div>
             <p class="text-xs text-slate-400 leading-relaxed mb-4">
-              Autonomous Python watchdog (<20MB RAM) + Uptime Kuma docker stack. Instant Telegram alerts for server reboots, RAM spikes, and crashes with 15m de-duplication.
+              Autonomous Python watchdog (<20MB RAM) + Uptime Kuma docker stack with 15m anti-spam de-duplication.
             </p>
           </div>
           <a href="https://ko-fi.com/s/d516f950ec" target="_blank" rel="noopener noreferrer" class="w-full py-2 px-3 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors">
@@ -298,16 +298,36 @@ services:
             <div class="flex items-center justify-between mb-2">
               <span class="text-xs font-bold text-white flex items-center gap-1.5">
                 <i data-lucide="home" class="w-4 h-4 text-indigo-400"></i>
-                <span>1-Click Home Assistant & Telegram Stack</span>
+                <span>Home Assistant Stack</span>
               </span>
               <span class="text-xs font-bold text-indigo-400 font-mono">$4.99</span>
             </div>
             <p class="text-xs text-slate-400 leading-relaxed mb-4">
-              Production Home Assistant container + Telegram 'broadcast' mode (eliminates 409 getUpdates conflicts). Pre-wired disk space, CPU, and WAN outage automations.
+              Host networking, pre-wired sensors & Telegram 'broadcast' mode (eliminates 409 getUpdates conflicts).
             </p>
           </div>
           <a href="https://ko-fi.com/s/0bb16302c6" target="_blank" rel="noopener noreferrer" class="w-full py-2 px-3 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors">
-            <span>Get Home Assistant Stack</span>
+            <span>Get HA Stack</span>
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+
+        <!-- Kit 3: WireGuard & Tailscale Stack -->
+        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700 transition-colors">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-white flex items-center gap-1.5">
+                <i data-lucide="shield" class="w-4 h-4 text-cyan-400"></i>
+                <span>WireGuard & Tailscale</span>
+              </span>
+              <span class="text-xs font-bold text-cyan-400 font-mono">$4.99</span>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed mb-4">
+              WireGuard-Easy Web UI + Tailscale subnet router & Python WAN shift alerting watchdog.
+            </p>
+          </div>
+          <a href="https://ko-fi.com/s/bf0f631422" target="_blank" rel="noopener noreferrer" class="w-full py-2 px-3 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors">
+            <span>Get VPN Stack</span>
             <i data-lucide="download" class="w-3.5 h-3.5"></i>
           </a>
         </div>

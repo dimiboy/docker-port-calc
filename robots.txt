@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://docker-ports.willpark.workers.dev/sitemap.xml
+Sitemap: https://ports.dimustech.net/sitemap.xml
